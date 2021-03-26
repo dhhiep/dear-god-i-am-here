@@ -1,7 +1,7 @@
 <template>
   <div id="asset-viewer">
     <template v-if="isVideo">
-      <VideoView :assetURL="assetURL" />
+      <VideoView :assetURL="assetURL" :screenWidth="screenWidth" />
     </template>
 
     <template v-else>
@@ -16,6 +16,7 @@ import last from 'lodash/last';
 import toLower from 'lodash/toLower';
 import ImageView from '@/components/assets/ImageView';
 import VideoView from '@/components/assets/VideoView';
+import JQuery from 'jquery';
 
 export default {
   props: {
@@ -32,6 +33,9 @@ export default {
       const fileExtenstion = toLower(last(split(this.assetURL, '.')));
 
       return ['mp4'].includes(fileExtenstion);
+    },
+    screenWidth() {
+      return JQuery(window).width();
     },
   },
 };
