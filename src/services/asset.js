@@ -1,11 +1,21 @@
 import { getResource } from '@/services/api';
+import * as storage from '@/utils/storage';
 
 export const fetch = () => {
   return new Promise((resolve) => {
-    getResource().then((resp) => {
-      const baseEndpoint = 'https://daihoigioitre2021.s3-ap-southeast-1.amazonaws.com';
+    const currentResourceKey = 'currentResource';
+    const latestResourceURL = storage.load(currentResourceKey);
 
-      resolve(`${baseEndpoint}/${resp.data}`);
-    });
+    if (latestResourceURL) {
+      resolve(latestResourceURL);
+    } else {
+      getResource().then((resp) => {
+        const baseEndpoint = 'https://daihoigioitre2021.s3-ap-southeast-1.amazonaws.com';
+        const resourceURL = `${baseEndpoint}/${resp.data}`;
+        storage.store(currentResourceKey, resourceURL);
+
+        resolve(resourceURL);
+      });
+    }
   });
 };
