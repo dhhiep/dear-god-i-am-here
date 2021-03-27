@@ -1,5 +1,5 @@
 <template>
-  <div id="Image-viewer">
+  <div id="image-viewer">
     <img :src="assetURL" alt="" />
   </div>
 </template>
@@ -16,8 +16,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-img {
-  width: 100%;
-  height: auto;
+@import '@/assets/stylesheets/variables.scss';
+
+#image-viewer {
+  text-align: center;
+  img {
+    width: 100%;
+    height: auto;
+    @include responsiveFrom(medium) {
+      width: auto;
+      height: 100vh;
+    }
+  }
 }
 </style>

@@ -35,10 +35,11 @@ export default {
       return ['mp4'].includes(fileExtenstion);
     },
     screenWidth() {
-      return JQuery(window).width();
+      const maxScreenWidth = 768;
+      const screenWidth = JQuery(window).width();
+
+      return screenWidth > maxScreenWidth ? maxScreenWidth : screenWidth;
     },
   },
 };
 </script>
-
-<style lang="sass" scoped></style>

@@ -1,14 +1,13 @@
 <template>
-  <div id="test">
+  <div id="video-viewer">
     <video-player class="vjs-custom-skin" ref="videoPlayer" :options="playerOptions" :playsinline="false">
     </video-player>
   </div>
 </template>
 
 <script>
-import 'video.js/dist/video-js.css';
-
 import { videoPlayer } from 'vue-video-player';
+import 'video.js/dist/video-js.css';
 
 export default {
   data() {
@@ -43,8 +42,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-/deep/ .vjs-big-play-button {
-  top: calc(50% - 40px);
-  left: calc(50% - 40px);
+#video-viewer {
+  text-align: center;
+}
+
+/deep/ .video-js {
+  margin: auto;
+  .vjs-big-play-button {
+    top: calc(50vh - 40px);
+    left: calc(50% - 40px);
+  }
 }
 </style>
