@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const getResource = () => {
-  const apiEndpoint = 'http://tunvt.somee.com/api/main';
+  const apiEndpoint = process.env.VUE_APP_BACKEND_URL;
 
   return apiCaller('GET', apiEndpoint);
 };
