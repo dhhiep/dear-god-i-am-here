@@ -1,7 +1,7 @@
 <template>
   <div id="asset-viewer">
     <template v-if="isVideo">
-      <VideoView :assetURL="assetURL" :screenWidth="screenWidth" />
+      <VideoView :assetURL="assetURL" :posterURL="posterURL" :screenWidth="screenWidth" />
     </template>
 
     <template v-else>
@@ -11,16 +11,17 @@
 </template>
 
 <script>
-import split from 'lodash/split';
-import last from 'lodash/last';
-import toLower from 'lodash/toLower';
+import JQuery from 'jquery';
 import ImageView from '@/components/assets/ImageView';
 import VideoView from '@/components/assets/VideoView';
-import JQuery from 'jquery';
+import { isVideoPath } from '@/utils/file_extension';
 
 export default {
   props: {
     assetURL: {
+      type: String,
+    },
+    posterURL: {
       type: String,
     },
   },
@@ -30,9 +31,7 @@ export default {
   },
   computed: {
     isVideo() {
-      const fileExtenstion = toLower(last(split(this.assetURL, '.')));
-
-      return ['mp4'].includes(fileExtenstion);
+      return isVideoPath(this.assetURL);
     },
     screenWidth() {
       const maxScreenWidth = 768;

@@ -22,12 +22,15 @@ export default {
             src: this.assetURL,
           },
         ],
-        poster: 'https://dhgt2012.s3-ap-southeast-1.amazonaws.com/Untitled-1-05.png',
+        poster: this.posterURL,
       },
     };
   },
   props: {
     assetURL: {
+      type: String,
+    },
+    posterURL: {
       type: String,
     },
     screenWidth: {

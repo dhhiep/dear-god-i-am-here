@@ -1,24 +1,70 @@
 export const namespaced = true;
 
-import * as AssetService from '@/services/asset';
+import { isVideoPath } from '@/utils/file_extension';
+import axios from 'axios';
+import { randomAssetURL } from '@/utils/assets';
 
 export const state = {
+  assets: [],
   currentAsset: '',
+  currentPoster: '',
 };
 
 export const mutations = {
+  SET_ASSETS(state, assets) {
+    state.assets = assets;
+  },
   SET_ASSET(state, asset) {
     state.currentAsset = asset;
+  },
+  SET_POSTER(state, poster) {
+    state.currentPoster = poster;
   },
 };
 
 export const actions = {
+  setAssets({ commit }, assets) {
+    commit('SET_ASSETS', assets);
+  },
   setAsset({ commit }, asset) {
     commit('SET_ASSET', asset);
   },
-  fetchAsset({ dispatch }) {
-    AssetService.fetch().then((asset) => {
-      dispatch('setAsset', asset);
+  setPoster({ commit }, poster) {
+    commit('SET_POSTER', poster);
+  },
+  fetchAssets({ dispatch }) {
+    return axios.get(process.env.VUE_APP_PUBLIC_BUCKET).then((response) => {
+      const assetRegexp = /((lixi|lixi-posters|lixi-tet|lixi-tet-posters)\/(\d|\w)+\.(png|jpg|mp4))/gm;
+      const assetPaths = response.data.match(assetRegexp);
+
+      dispatch('setAssets', assetPaths);
     });
+  },
+  fetchAsset({ dispatch, getters }) {
+    const assetURL = getters.fetchAsset;
+
+    if (isVideoPath(assetURL)) {
+      dispatch('fetchVideoPoster');
+    }
+
+    dispatch('setAsset', assetURL);
+  },
+  fetchVideoPoster({ dispatch, getters }) {
+    dispatch('setPoster', getters.fetchVideoPoster);
+  },
+};
+
+export const getters = {
+  fetchVideoPoster(state) {
+    const pathName = `${process.env.VUE_APP_NAME}-posters/`;
+    const posters = state.assets.filter((assetPath) => assetPath.includes(pathName));
+
+    return randomAssetURL(posters);
+  },
+  fetchAsset(state) {
+    const pathName = `${process.env.VUE_APP_NAME}/`;
+    const posters = state.assets.filter((assetPath) => assetPath.includes(pathName));
+
+    return randomAssetURL(posters);
   },
 };
