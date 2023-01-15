@@ -55,14 +55,19 @@ export const actions = {
 };
 
 export const getters = {
+  appName() {
+    const subdomain = window.location.host.split('.')[0];
+
+    return subdomain == 'lixi' ? 'lixi' : 'lixi-tet';
+  },
   fetchVideoPoster(state) {
-    const pathName = `${process.env.VUE_APP_NAME}-posters/`;
+    const pathName = `${getters.appName}-posters/`;
     const posters = state.assets.filter((assetPath) => assetPath.includes(pathName));
 
     return randomAssetURL(posters);
   },
-  fetchAsset(state) {
-    const pathName = `${process.env.VUE_APP_NAME}/`;
+  fetchAsset(state, getters) {
+    const pathName = `${getters.appName}/`;
     const posters = state.assets.filter((assetPath) => assetPath.includes(pathName));
 
     return randomAssetURL(posters);
